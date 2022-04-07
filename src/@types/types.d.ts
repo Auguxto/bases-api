@@ -8,3 +8,8 @@ export type Session = {
   username: string;
   password: string;
 };
+
+export type Permission = {
+  permission: string;
+  description: string;
+};

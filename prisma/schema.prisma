@@ -16,8 +16,34 @@ model User {
   username String @unique
   password String
 
+  admin Boolean @default(false)
+
+  permissions PermissionsOnUsers[]
+
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
   @@map("users")
+}
+
+model Permission {
+  id          String @id @default(uuid())
+  permission  String @unique
+  description String
+
+  users PermissionsOnUsers[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("permissions")
+}
+
+model PermissionsOnUsers {
+  user         User       @relation(fields: [userId], references: [id])
+  userId       String
+  permission   Permission @relation(fields: [permissionId], references: [id])
+  permissionId String
+
+  @@id([userId, permissionId])
 }
