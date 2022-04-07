@@ -1,4 +1,5 @@
 import validator from 'validator';
+import { Request } from 'express';
 
 import prismaClient from '../../prisma';
 
@@ -9,12 +10,18 @@ import { User } from '../../@types/types';
 import AppError from '../../error/AppError';
 
 class UpdateUserService {
-  async execute(id: string, { name, username, password }: User) {
+  async execute(id: string, request: Request, { name, username, password }: User) {
+    const logged_user = await prismaClient.user.findUnique({
+      where: { id: request.user_id },
+    });
+
     let user = await prismaClient.user.findUnique({
       where: { id },
     });
 
     if (!user) throw new AppError('Usuario não encontrado', 404);
+
+    if (logged_user.id !== user.id) throw new AppError('Você não tem permissão para alterar este usuário', 403);
 
     if (username && username !== user.username) {
       const user_exists = await prismaClient.user.findUnique({
@@ -34,14 +41,14 @@ class UpdateUserService {
       if (!is_strong_password) throw new AppError('Senha fraca', 401);
     }
 
-    const password_hash = encrypt(password, process.env.SECRET_ENCRYPT);
+    const password_hash = password ? encrypt(password, process.env.SECRET_ENCRYPT) : user.password;
 
     user = await prismaClient.user.update({
       where: { id },
       data: {
         name: name || user.name,
         username: username || user.username,
-        password: password_hash || user.password,
+        password: password_hash,
       },
     });
 

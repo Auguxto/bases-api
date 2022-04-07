@@ -13,7 +13,7 @@ async function ensureAuthenticated(request: Request, response: Response, next: N
   const [, token] = authToken.split(' ');
 
   try {
-    const { sub } = jwt.verify(token, process.env.JWT_SECRET) as { sub: string };
+    const { sub } = jwt.verify(token, process.env.SECRET_JWT) as { sub: string };
 
     const user = await prismaClient.user.findUnique({
       where: { id: sub },

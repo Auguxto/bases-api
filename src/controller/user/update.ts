@@ -10,7 +10,7 @@ class UpdateUserController {
     const { id } = request.params;
 
     const service = new UpdateUserService();
-    const user = await service.execute(id, params);
+    const user = await service.execute(id, request, params);
 
     return response.json({ user });
   }
