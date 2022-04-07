@@ -21,7 +21,9 @@ class UpdateUserService {
 
     if (!user) throw new AppError('Usuario não encontrado', 404);
 
-    if (logged_user.id !== user.id) throw new AppError('Você não tem permissão para alterar este usuário', 403);
+    if (!logged_user.admin) {
+      if (logged_user.id !== user.id) throw new AppError('Você não tem permissão para alterar este usuário', 403);
+    }
 
     if (username && username !== user.username) {
       const user_exists = await prismaClient.user.findUnique({
