@@ -8,30 +8,6 @@ import AppError from '../../error/AppError';
 
 class CreatePermissionService {
   async execute(request: Request, { permission, description }: Permission) {
-    const users = await prismaClient.user.findMany({
-      where: {
-        permissions: {
-          some: {
-            permission: {
-              permission: {
-                equals: 'create_user',
-              },
-            },
-          },
-        },
-      },
-      include: {
-        permissions: {
-          include: {
-            permission: true,
-            user: true,
-          },
-        },
-      },
-    });
-
-    console.log(users[0]);
-
     const logged_user = await prismaClient.user.findUnique({
       where: { id: request.user_id },
     });
