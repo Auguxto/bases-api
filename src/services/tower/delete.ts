@@ -4,7 +4,7 @@ import prismaClient from '../../prisma';
 
 import AppError from '../../error/AppError';
 
-class DeleteUserService {
+class DeleteTowerService {
   async execute(id: string, request: Request) {
     const logged_user = await prismaClient.user.findUnique({
       where: { id: request.user_id },
@@ -12,18 +12,18 @@ class DeleteUserService {
 
     if (!logged_user.admin) throw new AppError('Não autorizado', 401);
 
-    const user = await prismaClient.user.findUnique({
+    const tower = await prismaClient.tower.findUnique({
       where: { id },
     });
 
-    if (!user) throw new AppError('Usuario não encontrado');
+    if (!tower) throw new AppError('Torre não encontrada');
 
-    await prismaClient.user.delete({
+    await prismaClient.tower.delete({
       where: { id },
     });
 
-    return 'Usuario removido';
+    return 'Torre removida';
   }
 }
 
-export default DeleteUserService;
+export default DeleteTowerService;

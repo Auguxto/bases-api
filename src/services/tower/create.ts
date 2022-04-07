@@ -29,7 +29,7 @@ class CreateTowerService {
       },
     });
 
-    if (towers.length >= 1) throw new AppError('Torre ja regisratada com o mesmo IP ou Nome', 400);
+    if (towers.length >= 1) throw new AppError('Torre ja registrada com o mesmo IP ou Nome', 400);
 
     const tower = await prismaClient.tower.create({
       data: {
@@ -45,6 +45,9 @@ class CreateTowerService {
             create: { name: city },
           },
         },
+      },
+      include: {
+        city: true,
       },
     });
 
