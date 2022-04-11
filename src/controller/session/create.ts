@@ -9,9 +9,9 @@ class CreateSessionController {
     const params: Session = request.body;
 
     const service = new CreateSessionService();
-    const token = await service.execute(params, response);
+    const user = await service.execute(params, response);
 
-    return response.json({ token });
+    return response.json({ user });
   }
 }
 

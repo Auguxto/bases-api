@@ -32,10 +32,11 @@ class CreateSessionService {
       maxAge: 86400,
       httpOnly: true,
     };
+    delete user.password;
 
     response.cookie('sid-bases', token, { ...cookieOptions, sameSite: 'strict' });
 
-    return token;
+    return user;
   }
 }
 
