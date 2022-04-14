@@ -36,7 +36,7 @@ class CreateSessionService {
 
     response.cookie('sid-bases', token, { ...cookieOptions, sameSite: 'strict' });
 
-    return user;
+    return { user, token };
   }
 }
 

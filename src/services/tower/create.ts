@@ -2,10 +2,11 @@ import { Request } from 'express';
 
 import prismaClient from '../../prisma';
 
+import { encrypt } from '../../lib/crypt';
+
 import { Tower } from '../../@types/types';
 
 import AppError from '../../error/AppError';
-import { encrypt } from '../../lib/crypt';
 
 class CreateTowerService {
   async execute(request: Request, { ip, name, username, password, vpn, mikrotik, city }: Tower) {
